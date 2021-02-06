@@ -10,26 +10,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.annotations.ApiParam;
+import com.google.gson.Gson;
+
 import it.azware.jsonquik.model.MyDemoClass;
 import it.azware.jsonquik.service.JsonQuikService;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v2/jsonquik")
+@RequestMapping("/api/v2")
 @AllArgsConstructor
 public class JsonQuikControllerImpl implements JsonQuikController {
 
 	private final JsonQuikService jsonQuikService;
 
-	@GetMapping(value = "/demo", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/json", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	@ApiParam(value = "foobar")
-	public ResponseEntity<String> process(@RequestParam(required = false) String pretty) {
+	@Override
+	public ResponseEntity<String> getJson(@RequestParam(required = false) String pretty) {
 		pretty = StringUtils.defaultIfBlank(pretty, "Y");
 		String json = pretty.equalsIgnoreCase("Y") 
 				? jsonQuikService.toPrettyJson(new MyDemoClass())
 				: jsonQuikService.toJson(new MyDemoClass());
 		return ResponseEntity.status(HttpStatus.OK).body(json);
+	}
+	
+	@GetMapping(value = "/obj", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	@Override
+	public ResponseEntity<MyDemoClass> getObject() {
+		String prettyJson = jsonQuikService.toPrettyJson(new MyDemoClass());
+		MyDemoClass myDemoClass = new Gson().fromJson(prettyJson, MyDemoClass.class);
+		return ResponseEntity.status(HttpStatus.OK).body(myDemoClass);
 	}
 }

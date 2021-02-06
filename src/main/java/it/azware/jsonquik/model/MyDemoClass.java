@@ -16,7 +16,7 @@ public class MyDemoClass {
     private Date date;
     private List<BigDecimal> importSum;
     private List<Integer> count;
-//    private List<Transaction> transactions;
+    private List<Transaction> transactions;
 
     @Data
     @NoArgsConstructor
