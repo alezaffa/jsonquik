@@ -9,9 +9,9 @@ import it.azware.jsonquik.interceptor.Interceptor;
 @Configuration
 public class Config implements WebMvcConfigurer {
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-	registry.addInterceptor(new Interceptor());
-    }
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new Interceptor());
+	}
 
 }
